@@ -120,6 +120,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 set(MDF_PUBLIC_HEADERS
+    ../include/mdf/canmessage.h
     ../include/mdf/cryptoutil.h
     ../include/mdf/etag.h
     ../include/mdf/iattachment.h
