@@ -137,6 +137,7 @@ set(MDF_PUBLIC_HEADERS
     ../include/mdf/iheader.h
     ../include/mdf/imetadata.h
     ../include/mdf/isampleobserver.h
+    ../include/mdf/isamplereduction.h
     ../include/mdf/isourceinformation.h
     ../include/mdf/mdffactory.h
     ../include/mdf/mdffile.h
