@@ -34,7 +34,7 @@ class IdBlock : public MdfBlock {
  private:
   std::string file_identifier_ =
       "MDF     ";  ///< Note the string must be 8 characters including spaces
-  std::string format_identifier_ = "4.20";
+  std::string format_identifier_ = "4.10";
   std::string program_identifier_ = "MdfWrite";
   /* uint16_t byte_order_ = 0; Default 0 = Little endian (Intel byte order).
    * Defined in MdfBlock class. */

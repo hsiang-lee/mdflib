@@ -132,22 +132,23 @@ class MdfBlock {
 
   [[nodiscard]] bool IsMdf4() const;
 
-  [[nodiscard]] const MdfBlock* HeaderBlock() const;
+  [[nodiscard]] const MdfBlock *HeaderBlock() const;
 
-  [[nodiscard]] const MdfBlock* DgBlock() const;
-  [[nodiscard]] const MdfBlock* CgBlock() const;
+  [[nodiscard]] const MdfBlock *DgBlock() const;
+  [[nodiscard]] const MdfBlock *CgBlock() const;
+
  protected:
   int64_t file_position_ = 0;  ///< 64-bit file position.
-  std::string block_type_;   ///< MDF header. MDF3 has 2 characters. MDF4 has 4
-                               ///< characters.
+  std::string block_type_;  ///< MDF header. MDF3 has 2 characters. MDF4 has 4
+                            ///< characters.
   /**
    * The MDF3 has big or little endian byte order while MDF4 always uses little
    * endian byte order.
    */
   uint16_t byte_order_ = 0;  ///< Default set to Intel (little) byte order.
-  uint16_t version_ = 420;   ///< Default set to 4.2.
+  uint16_t version_ = 410;   ///< Default set to 4.2.
 
-  uint16_t block_size_ = 0;  ///< MDF3 16-bit block size.
+  uint16_t block_size_ = 0;         ///< MDF3 16-bit block size.
   uint64_t block_length_ = 0;       ///< MDF4 64-bit block size.
   uint64_t link_count_ = 0;         ///< MDF4 number of links.
   std::vector<int64_t> link_list_;  ///< MDF link list
@@ -156,7 +157,6 @@ class MdfBlock {
       md_comment_;  ///< Most MDF4 block has a MD block referenced
 
   MdfBlock() = default;
-
 
   size_t ReadHeader3(std::FILE *file);  ///< Reads a MDF3 block header.
   size_t ReadLinks3(
@@ -180,11 +180,8 @@ class MdfBlock {
   [[nodiscard]] virtual IMetaData *CreateMetaData();
   [[nodiscard]] virtual IMetaData *MetaData() const;
 
-
   void CreateMd4Block();  ///< Helper function that creates an MD4 block to this
                           ///< block
-
-
 
   /** \brief Reads in a list of blocks from the file.
    *
@@ -218,10 +215,8 @@ class MdfBlock {
   void WriteBlock4(std::FILE *file, std::unique_ptr<T> &block,
                    size_t link_index);
 
-
-
  private:
-  const MdfBlock* parent_ = nullptr; ///< Set by the Init() function
+  const MdfBlock *parent_ = nullptr;  ///< Set by the Init() function
 };
 
 template <typename T>
@@ -247,8 +242,7 @@ std::size_t MdfBlock::ReadNumber(std::FILE *file, T &dest) const {
 template <typename T>
 std::size_t MdfBlock::WriteNumber(std::FILE *file, const T &source) const {
   if (file == nullptr) {
-    throw std::runtime_error(
-        "File pointer is null. Invalid use of function.");
+    throw std::runtime_error("File pointer is null. Invalid use of function.");
   }
   if (IsBigEndian()) {
     const BigBuffer buff(source);
@@ -268,8 +262,8 @@ std::size_t MdfBlock::WriteNumber(std::FILE *file, const T &source) const {
 
 template <typename T>
 void MdfBlock::ReadLink4List(std::FILE *file,
-                           std::vector<std::unique_ptr<T>> &block_list,
-                           size_t link_index) {
+                             std::vector<std::unique_ptr<T>> &block_list,
+                             size_t link_index) {
   if (block_list.empty() && (Link(link_index) > 0))
     for (auto link = Link(link_index); link > 0; /* No ++ here*/) {
       auto block = std::make_unique<T>();
@@ -283,7 +277,7 @@ void MdfBlock::ReadLink4List(std::FILE *file,
 
 template <typename T>
 void MdfBlock::WriteBlock4(std::FILE *file, std::unique_ptr<T> &block,
-                         size_t link_index) {
+                           size_t link_index) {
   if (!block || block->FilePosition() > 0) {
     return;
   }
@@ -293,8 +287,8 @@ void MdfBlock::WriteBlock4(std::FILE *file, std::unique_ptr<T> &block,
 
 template <typename T>
 void MdfBlock::WriteLink4List(std::FILE *file,
-                            std::vector<std::unique_ptr<T>> &block_list,
-                            size_t link_index, UpdateOption update_option) {
+                              std::vector<std::unique_ptr<T>> &block_list,
+                              size_t link_index, UpdateOption update_option) {
   for (size_t index = 0; index < block_list.size(); ++index) {
     auto &block = block_list[index];
     const bool last_block = index + 1 >= block_list.size();
